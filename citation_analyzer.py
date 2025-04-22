@@ -2,12 +2,9 @@ import openai
 import os
 import logging
 from typing import List, Dict, Any
-import google.generativeai as genai
-
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-genai.configure(api_key="AIzaSyCnHlsIB-xBfouiUJHcA8dYYg4XMAdNOw0")
 
 class CitationAnalyzer:
     def __init__(self, api_key=None):
@@ -48,19 +45,21 @@ class CitationAnalyzer:
             
             Format your response as a JSON with these keys: "contribution", "purpose", "stance"
             """
+            
             prompt_with_system = """You are a research assistant that analyzes academic citations.""" + prompt
-            model = genai.GenerativeModel("models/gemini-1.5-flash-001")
-            response = model.generate_content(
-            prompt_with_system,
-            generation_config=genai.types.GenerationConfig(
+            
+            response = self.client.chat.completions.create(
+                model="gpt-4",
+                messages=[
+                    {"role": "system", "content": "You are a research assistant that analyzes academic citations."},
+                    {"role": "user", "content": prompt}
+                ],
                 temperature=0.3,
-                max_output_tokens=500,
-                ))
-        
-
+                max_tokens=500
+            )
+            
             # Extract and clean the response
-            result = response.text.strip()
-
+            result = response.choices[0].message.content.strip()
             
 
             # Process the JSON response (in practice, add error handling here)
