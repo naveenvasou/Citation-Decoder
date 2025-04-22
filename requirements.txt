@@ -1,0 +1,7 @@
+
+PyMuPDF>=1.18.0
+openai>=1.0.0
+streamlit>=1.0.0
+pandas>=1.1.0
+requests>=2.24.0
+python-dotenv>=0.15.0
